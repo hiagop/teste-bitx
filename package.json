@@ -1,0 +1,20 @@
+{
+  "name": "teste-bitx",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node ./src/server.ts",
+    "watch": "nodemon"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.0",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "@types/express": "^4.16.1",
+    "body-parser": "^1.19.0",
+    "express": "^4.16.4"
+  }
+}
