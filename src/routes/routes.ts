@@ -42,15 +42,13 @@ router.get("/console/:name", (req, res) => {
             if(err) { 
                 res.json({ success: false, msg: err })
             } else if(consoleDoc) {                
-                const consoleData = { 
-                    id: consoleDoc._id,
-                    name: consoleDoc.name,
-                    company: consoleDoc.company 
-                };
-
                 res.json({
                     success: true,
-                    data: consoleData
+                    data: { 
+                        id: consoleDoc._id,
+                        name: consoleDoc.name,
+                        company: consoleDoc.company 
+                    }
                 });
             }
         });
@@ -58,24 +56,66 @@ router.get("/console/:name", (req, res) => {
 });
 
 router.get("/games", (req, res) => {
-    res.json({
-        success: true,
-        data: {}
+    Game.find({}, (err, games) => {
+        if(err) { 
+            res.json({ success: false, msg: err })
+        } else {
+            const gameArr = [];
+            games.forEach((gameDoc: GameModel) => {
+                gameArr.push({ 
+                    id: gameDoc._id,
+                    name: gameDoc.name,
+                    console_name: gameDoc.console_name
+                })
+            });
+            res.json({
+                sucess: true,
+                data: gameArr
+            });
+        }
     })
 });
 
 router.get("/games/:console", (req, res) => {
-    res.json({
-        success: true,
-        data: {}
-    })
+    if(req.params.console) {
+        Game.find({console_name: req.params.console }, (err, games) => {
+            if(err) { 
+                res.json({ success: false, msg: err })
+            } else {
+                const gameArr = [];
+                games.forEach((gameDoc: GameModel) => {
+                    gameArr.push({ 
+                        id: gameDoc._id,
+                        name: gameDoc.name,
+                        console_name: gameDoc.console_name
+                    })
+                });
+                res.json({
+                    sucess: true,
+                    data: gameArr
+                });
+            }
+        });
+    }
 });
 
-router.get("/game/:title", (req, res) => {
-    res.json({
-        success: true,
-        data: {}
-    })
+router.get("/game/:name", (req, res) => {
+    if(req.params.name) {
+        Game.findOne({ name: req.params.name }, (err, gameDoc: GameModel) => {
+            if(err) { 
+                res.json({ success: false, msg: err })
+            } else if(gameDoc) {                
+                res.json({
+                    success: true,
+                    data: { 
+                        id: gameDoc._id,
+                        name: gameDoc.name,
+                        console_name: gameDoc.console_name 
+                    }
+                });
+            }
+        });
+    }
 });
 
 router.post("/console", (req, res) => {
@@ -101,8 +141,26 @@ router.post("/console", (req, res) => {
         }
     })
 });
+
 router.post("/game", (req, res) => {
-    res.json(req.body)
+    Game.findOne({ name: req.body.name }, (err, foundGame) => {
+        if(err) { res.json({ success: false, msg: err}) };
+        if(foundGame) {
+            res.json({ success: false, msg: "Jogo já cadastrado." })
+        } else {
+            const _game = new Game({
+                name: req.body.name,
+                console_name: req.body.console_name
+            });
+            _game.save((err) => {
+                if(err) {
+                    res.json({ success: false, msg: err })
+                } else {
+                    res.json({ success: true })
+                }
+            });
+        }
+    });
 });
 
 export default router;

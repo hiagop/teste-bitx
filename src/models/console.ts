@@ -7,7 +7,7 @@ export type ConsoleModel = mongoose.Document & {
 
 const ConsoleSchema = new mongoose.Schema ({
     name: { type: String, unique: true, required: true, trim: true },
-    company: { type: String, required: true, trim: true }
+    company: { type: String, trim: true }
 });
 
 const Console = mongoose.model("Console", ConsoleSchema);
