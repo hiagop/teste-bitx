@@ -1,8 +1,19 @@
-import express from "express";
+import express from 'express';
 import bodyParser from 'body-parser';
+import bluebird from 'bluebird';
 import api from './routes/routes';
+import mongoose from 'mongoose';
 
-const port = process.env.SERVER_PORT || 8000;
+const mongodbURL = process.env.MONGODB_URL || "mongodb://localhost:27017/teste-bitx";
+
+(<any>mongoose).Promise = bluebird;
+mongoose.connect(mongodbURL, {useNewUrlParser: true}).then(() => {
+    console.log(`mongodb connected at ${mongodbURL}`);
+}).catch((err) => {
+    console.log(`mongodb connection error: ${err}`)
+})
+
+const port = parseInt(process.env.SERVER_PORT) || 8000;
 const server = express();
 
 server.use(bodyParser.json());
