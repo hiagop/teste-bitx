@@ -6,15 +6,18 @@ import mongoose from 'mongoose';
 
 
 const mongodbURL = process.env.MONGODB_URL || "mongodb://localhost:27017/teste-bitx";
-
-(<any>mongoose).Promise = bluebird;
-mongoose.connect(mongodbURL, {
+const mongodbOptions = {
     useNewUrlParser: true,
     auth: {
         user: "root",
         password: "t3st3b1tX"
-        }
-    }).then(() => {
+    },
+    authSource: "admin"
+    };
+
+(<any>mongoose).Promise = bluebird;
+mongoose.set("useCreateIndex", true);
+mongoose.connect(mongodbURL, mongodbOptions).then(() => {
     console.log(`mongodb connected at ${mongodbURL}`);
 }).catch((err) => {
     console.log(`mongodb connection error: ${err}`)

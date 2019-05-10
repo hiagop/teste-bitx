@@ -1,5 +1,4 @@
 import Router from 'express';
-import crypto from 'crypto';
 import { default as Game, GameModel } from '../models/game';
 import { default as Console, ConsoleModel} from '../models/console';
 
@@ -16,34 +15,62 @@ router.get("/", (req, res) => {
 })
 
 router.get("/consoles", (req, res) => {
-    res.json({
-        success: true,
-        data: {}
+    Console.find({}, (err, consoles) => {
+        if(err) { 
+            res.json({ success: false, msg: err })
+        } else {
+            const consoleArr = [];
+            consoles.forEach((consoleDoc: ConsoleModel) => {
+                consoleArr.push({ 
+                    id: consoleDoc._id,
+                    name: consoleDoc.name,
+                    company: consoleDoc.company 
+                })
+            });
+            res.json({
+                sucess: true,
+                data: consoleArr
+            });
+        }
     })
 });
+
 router.get("/console/:name", (req, res) => {
 
     if(req.params.name) {
-        res.json({name: req.params.name})
-    }
+        Console.findOne({ name: req.params.name }, (err, consoleDoc: ConsoleModel) => {
+            if(err) { 
+                res.json({ success: false, msg: err })
+            } else if(consoleDoc) {                
+                const consoleData = { 
+                    id: consoleDoc._id,
+                    name: consoleDoc.name,
+                    company: consoleDoc.company 
+                };
 
-    res.json({
-        success: true,
-        data: {}
-    })
+                res.json({
+                    success: true,
+                    data: consoleData
+                });
+            }
+        });
+    }
 });
+
 router.get("/games", (req, res) => {
     res.json({
         success: true,
         data: {}
     })
 });
+
 router.get("/games/:console", (req, res) => {
     res.json({
         success: true,
         data: {}
     })
 });
+
 router.get("/game/:title", (req, res) => {
     res.json({
         success: true,
@@ -58,9 +85,7 @@ router.post("/console", (req, res) => {
         if(foundConsole) {
             res.json({ success: false, msg: "Console já cadastrado." })
         } else {
-            const hash = crypto.createHash("sha256").update(req.body.name)
             const _console = new Console({
-                id: hash.digest("hex"),
                 name: req.body.name,
                 company: req.body.company
             });

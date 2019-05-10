@@ -1,15 +1,13 @@
 import mongoose from 'mongoose';
 
 export type GameModel = mongoose.Document & {
-    id: string,
-    title: string,
+    name: string,
     console: string,
     console_id: string
 };
 
 const GameSchema = new mongoose.Schema ({
-    id: { type: String, unique: true, required: true },
-    title: { type: String, required: true, trim: true },
+    name: { type: String, unique: true, required: true, trim: true },
     console: { type: String, required: true, trim: true },
     console_id: { type: String, required: true, trim: true }
 });
