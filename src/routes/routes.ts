@@ -5,10 +5,10 @@ const router = Router();
 router.get("/", (req, res) => {
     res.json({
             "all consoles": "/consoles",
-            "consoles by name":"/console/:<console_name>",
+            "consoles by name":"/console/<console_name>",
             "all games":"/games",
-            "all games by console":"/games/:<console_name>",
-            "games by title":"/game/:<game_title>"
+            "all games by console":"/games/<console_name>",
+            "games by title":"/game/<game_title>"
     });
 })
 
