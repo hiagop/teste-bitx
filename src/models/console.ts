@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 export type ConsoleModel = mongoose.Document & {
     id: string,
