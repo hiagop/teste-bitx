@@ -5,7 +5,7 @@ import api from './routes/routes';
 import mongoose from 'mongoose';
 
 
-const mongodbURL = process.env.MONGODB_URL || "mongodb://localhost:27017/teste-bitx";
+const mongodbURL = "mongodb://localhost:27017/teste-bitx";
 const mongodbOptions = {
     useNewUrlParser: true,
     auth: {
@@ -33,5 +33,3 @@ server.use("/", api);
 server.listen(port, () => {
     console.log(`server running on port: ${port}`);
 })
-
-
